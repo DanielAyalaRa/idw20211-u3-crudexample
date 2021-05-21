@@ -21,15 +21,25 @@ module.exports = () => {
         Country.create(country)
             .then(
                 (data) => {
-                    //console.log(data);
-                    res.json(
-                        {
-                            code: status.OK,
-                            msg: 'Se insertó correctamente',
-                            data: data
-                        }
-                    )
-                    //console.log(res);
+                    if(!data.code) {
+                        console.log(data);
+                        res.json(
+                            {
+                                code: status.OK,
+                                msg: 'Se insertó correctamente',
+                                data: data
+                            }
+                        )
+                        //console.log(res);
+                    }//SINO ESTA EN USO EL CODE
+                    else {
+                        res.status(status.UNPROCESSABLE_ENTITY)
+                            .json({
+                                code: status.UNPROCESSABLE_ENTITY,
+                                msg: `No puedes insertar el code del pais ya se encuentra en uso (${data.code})`
+                            });
+                    }
+                    
                 }
             )
             .catch(
